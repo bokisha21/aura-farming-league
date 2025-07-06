@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Aura Farming League</title>
 
-  <!-- ✅ Firebase SDKs: Compat version for static HTML -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
@@ -14,6 +14,10 @@
     h1 { text-align: center; font-size: 2.8em; color: #00fff7; text-shadow: 0 0 20px #00fff7; }
     .league { margin-bottom: 50px; border-radius: 15px; padding: 20px; background: rgba(255,255,255,0.05); box-shadow: 0 0 20px rgba(0,255,255,0.2); }
     .league h2 { text-align: center; margin-bottom: 25px; font-size: 2em; text-shadow: 0 0 10px #fff; }
+    .golden { border: 2px solid gold; }
+    .silver { border: 2px solid silver; }
+    .bronze { border: 2px solid #cd7f32; }
+    .shit { border: 2px solid #555; }
     .members { display: flex; flex-wrap: wrap; justify-content: center; }
     .member { background: linear-gradient(145deg, #1c1c1c, #111); margin: 10px; padding: 20px; border-radius: 15px; text-align: center; width: 160px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; }
     .member:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,255,255,0.5); }
@@ -30,9 +34,25 @@
 
 <body>
   <h1>🌟 AURA FARMING LEAGUE</h1>
-  <div class="league">
-    <h2>Members</h2>
-    <div class="members" id="members"></div>
+
+  <div class="league golden">
+    <h2>🥇 GOLDEN TICKET</h2>
+    <div class="members" id="golden-members"></div>
+  </div>
+
+  <div class="league silver">
+    <h2>🥈 SILVER TICKET</h2>
+    <div class="members" id="silver-members"></div>
+  </div>
+
+  <div class="league bronze">
+    <h2>🥉 BRONZE TICKET</h2>
+    <div class="members" id="bronze-members"></div>
+  </div>
+
+  <div class="league shit">
+    <h2>💩 SHIT HOUSE</h2>
+    <div class="members" id="shit-members"></div>
   </div>
 
   <div class="overlay" id="overlay"></div>
@@ -43,12 +63,12 @@
   </div>
 
   <script>
-    // ✅ Firebase config — uses your real project keys:
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyCIrW60i6l93H3dzNlHXn_3fM0NdONKais",
       authDomain: "aura-f2bf4.firebaseapp.com",
       projectId: "aura-f2bf4",
-      storageBucket: "aura-f2bf4.firebasestorage.app",
+      storageBucket: "aura-f2bf4.appspot.com",
       messagingSenderId: "803990647918",
       appId: "1:803990647918:web:a75f86e5ac99ed79f3227f",
       measurementId: "G-0TE73W0G4X"
@@ -57,7 +77,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    const membersDiv = document.getElementById('members');
     const overlay = document.getElementById('overlay');
     const popup = document.getElementById('popup');
     const popupName = document.getElementById('popup-name');
@@ -66,18 +85,33 @@
 
     function loadMembers() {
       db.collection('members').onSnapshot(snapshot => {
-        membersDiv.innerHTML = '';
+        const golden = document.getElementById('golden-members');
+        const silver = document.getElementById('silver-members');
+        const bronze = document.getElementById('bronze-members');
+        const shit = document.getElementById('shit-members');
+
+        golden.innerHTML = '';
+        silver.innerHTML = '';
+        bronze.innerHTML = '';
+        shit.innerHTML = '';
+
         snapshot.forEach(doc => {
           const data = doc.data();
+          const aura = data.aura;
           const div = document.createElement('div');
           div.className = 'member';
           div.dataset.id = doc.id;
           div.innerHTML = `
             <div class="member-name">${doc.id}</div>
-            <div class="aura-value">${data.aura >= 0 ? '+' : ''}${data.aura}k</div>
+            <div class="aura-value">${aura >= 0 ? '+' : ''}${aura}k</div>
           `;
-          div.onclick = () => openPopup(doc.id, data.aura);
-          membersDiv.appendChild(div);
+          div.onclick = () => openPopup(doc.id, aura);
+
+          // Place in correct league
+          if (aura >= 500) golden.appendChild(div);
+          else if (aura >= 0) silver.appendChild(div);
+          else if (aura > -500) bronze.appendChild(div);
+          else shit.appendChild(div);
         });
       });
     }
