@@ -4,8 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Aura Farming League</title>
+
+  <!-- ✅ Firebase SDKs: Compat version for static HTML -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
   <style>
     body { background: #0d0d0d; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
     h1 { text-align: center; font-size: 2.8em; color: #00fff7; text-shadow: 0 0 20px #00fff7; }
@@ -16,27 +19,31 @@
     .member:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,255,255,0.5); }
     .member-name { font-weight: bold; margin-bottom: 8px; font-size: 1.3em; }
     .aura-value { font-size: 1.4em; margin: 5px 0; color: #00fff7; text-shadow: 0 0 10px #00fff7; }
-    .popup, .overlay { display: none; }
+    .overlay { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:none;z-index:5; }
+    .popup { position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#222;padding:25px;border-radius:15px;display:none;z-index:10;width:300px;text-align:center;box-shadow:0 0 20px #00fff7; }
+    .popup h3 { margin-bottom: 20px; color: #00fff7; text-shadow: 0 0 10px #00fff7; }
+    .popup button { margin: 6px; padding: 10px 16px; border: none; border-radius: 8px; background: #00fff7; color: #000; cursor: pointer; font-size: 1em; box-shadow: 0 0 10px #00fff7; transition: background 0.2s, transform 0.2s; }
+    .popup button:hover { background: #00cccc; transform: scale(1.05); }
+    @media(max-width: 600px){ .member { width: 100%; } }
   </style>
 </head>
+
 <body>
-
   <h1>🌟 AURA FARMING LEAGUE</h1>
-
   <div class="league">
     <h2>Members</h2>
     <div class="members" id="members"></div>
   </div>
 
-  <div class="overlay" id="overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:5;"></div>
-  <div class="popup" id="popup" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#222;padding:25px;border-radius:15px;z-index:10;width:300px;text-align:center;box-shadow:0 0 20px #00fff7;">
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
     <h3 id="popup-name"></h3>
     <div id="popup-buttons"></div>
     <button onclick="closePopup()">Close</button>
   </div>
 
   <script>
-    // Firebase config
+    // ✅ Firebase config — uses your real project keys:
     const firebaseConfig = {
       apiKey: "AIzaSyCIrW60i6l93H3dzNlHXn_3fM0NdONKais",
       authDomain: "aura-f2bf4.firebaseapp.com",
@@ -47,7 +54,6 @@
       measurementId: "G-0TE73W0G4X"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
@@ -58,7 +64,6 @@
     const popupButtons = document.getElementById('popup-buttons');
     let currentMemberId = null;
 
-    // Load members
     function loadMembers() {
       db.collection('members').onSnapshot(snapshot => {
         membersDiv.innerHTML = '';
@@ -76,8 +81,6 @@
         });
       });
     }
-
-    loadMembers();
 
     function openPopup(id, aura) {
       currentMemberId = id;
@@ -112,7 +115,8 @@
         }
       });
     }
-  </script>
 
+    loadMembers();
+  </script>
 </body>
 </html>
