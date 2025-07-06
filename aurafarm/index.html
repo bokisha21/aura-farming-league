@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aura Farming League</title>
+  <style>
+    body {
+      background: #0d0d0d;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      color: #00fff7;
+      text-shadow: 0 0 20px #00fff7;
+    }
+    .league {
+      margin-bottom: 50px;
+      border-radius: 15px;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 0 20px rgba(0,255,255,0.2);
+      backdrop-filter: blur(5px);
+    }
+    .league h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px #fff;
+      font-size: 2em;
+    }
+    .golden { border: 2px solid gold; }
+    .silver { border: 2px solid silver; }
+    .bronze { border: 2px solid #cd7f32; }
+    .shit { border: 2px solid #555; }
+
+    .members {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .member {
+      background: linear-gradient(145deg, #1c1c1c, #111);
+      margin: 10px;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      width: 160px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .member:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,255,255,0.5);
+    }
+    .member-name {
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 1.3em;
+    }
+    .aura-value {
+      font-size: 1.4em;
+      margin: 5px 0;
+      color: #00fff7;
+      text-shadow: 0 0 10px #00fff7;
+    }
+
+    .overlay {
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      z-index: 5;
+    }
+
+    .popup {
+      position: fixed;
+      top:50%;
+      left:50%;
+      transform: translate(-50%, -50%);
+      background: #1e1e1e;
+      padding: 25px;
+      border-radius: 15px;
+      display: none;
+      z-index: 10;
+      text-align: center;
+      width: 340px;
+      max-width: 95%;
+      box-shadow: 0 0 20px #00fff7;
+    }
+
+    .popup h3 {
+      margin-bottom: 20px;
+      color: #00fff7;
+      text-shadow: 0 0 10px #00fff7;
+    }
+
+    .popup button {
+      margin: 6px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #00fff7;
+      color: #000;
+      cursor: pointer;
+      font-size: 1em;
+      box-shadow: 0 0 10px #00fff7;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .popup button:hover {
+      background: #00cccc;
+      transform: scale(1.05);
+    }
+
+    @media(max-width: 600px){
+      .member { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌟 AURA FARMING LEAGUE</h1>
+
+  <div class="league golden">
+    <h2>🥇 GOLDEN TICKET</h2>
+    <div class="members" id="golden-members">
+      <!-- No members initially -->
+    </div>
+  </div>
+
+  <div class="league silver">
+    <h2>🥈 SILVER TICKET</h2>
+    <div class="members" id="silver-members">
+      <div class="member" data-name="Deko" data-aura="100">
+        <div class="member-name">Deko</div>
+        <div class="aura-value">+100k</div>
+      </div>
+      <div class="member" data-name="Marko" data-aura="170">
+        <div class="member-name">Marko</div>
+        <div class="aura-value">+170k</div>
+      </div>
+      <div class="member" data-name="Martin" data-aura="130">
+        <div class="member-name">Martin</div>
+        <div class="aura-value">+130k</div>
+      </div>
+      <div class="member" data-name="Boko" data-aura="130">
+        <div class="member-name">Boko</div>
+        <div class="aura-value">+130k</div>
+      </div>
+      <div class="member" data-name="Vlado" data-aura="20">
+        <div class="member-name">Vlado</div>
+        <div class="aura-value">+20k</div>
+      </div>
+      <div class="member" data-name="Angele" data-aura="40">
+        <div class="member-name">Angele</div>
+        <div class="aura-value">+40k</div>
+      </div>
+      <div class="member" data-name="Kire" data-aura="10">
+        <div class="member-name">Kire</div>
+        <div class="aura-value">+10k</div>
+      </div>
+      <div class="member" data-name="Coci" data-aura="115">
+        <div class="member-name">Coci</div>
+        <div class="aura-value">+115k</div>
+      </div>
+      <div class="member" data-name="Niki" data-aura="10">
+        <div class="member-name">Niki</div>
+        <div class="aura-value">+10k</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="league bronze">
+    <h2>🥉 BRONZE TICKET</h2>
+    <div class="members" id="bronze-members">
+      <div class="member" data-name="Laze" data-aura="-450">
+        <div class="member-name">Laze</div>
+        <div class="aura-value">-450k</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="league shit">
+    <h2>💩 SHIT HOUSE</h2>
+    <div class="members" id="shit-members">
+      <div class="member" data-name="Chokov" data-aura="-730">
+        <div class="member-name">Chokov</div>
+        <div class="aura-value">-730k</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay"></div>
+  <div class="popup" id="popup">
+    <h3 id="popup-name"></h3>
+    <div id="popup-buttons"></div>
+    <button onclick="closePopup()">Close</button>
+  </div>
+
+  <script>
+    const overlay = document.querySelector('.overlay');
+    const popup = document.getElementById('popup');
+    const popupName = document.getElementById('popup-name');
+    const popupButtons = document.getElementById('popup-buttons');
+    let currentMember = null;
+
+    const amounts = [10, 20, 30, 40, 50, 100];
+
+    document.querySelectorAll('.member').forEach(member => {
+      member.addEventListener('click', () => {
+        currentMember = member;
+        popupName.innerText = member.dataset.name + " (" + member.dataset.aura + "k)";
+        popupButtons.innerHTML = '';
+
+        amounts.forEach(a => {
+          const plus = document.createElement('button');
+          plus.innerText = '+ ' + a + 'k';
+          plus.onclick = () => updateAura(a);
+          popupButtons.appendChild(plus);
+
+          const minus = document.createElement('button');
+          minus.innerText = '- ' + a + 'k';
+          minus.onclick = () => updateAura(-a);
+          popupButtons.appendChild(minus);
+        });
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+      });
+    });
+
+    function closePopup(){
+      overlay.style.display = 'none';
+      popup.style.display = 'none';
+    }
+
+    function updateAura(amount){
+      let aura = parseInt(currentMember.dataset.aura);
+      aura += amount;
+      currentMember.dataset.aura = aura;
+      currentMember.querySelector('.aura-value').innerText = (aura >= 0 ? "+" : "") + aura + "k";
+      popupName.innerText = currentMember.dataset.name + " (" + aura + "k)";
+      moveMember(currentMember, aura);
+    }
+
+    function moveMember(member, aura){
+      const golden = document.getElementById('golden-members');
+      const silver = document.getElementById('silver-members');
+      const bronze = document.getElementById('bronze-members');
+      const shit = document.getElementById('shit-members');
+
+      member.parentNode.removeChild(member);
+
+      if (aura >= 500) {
+        golden.appendChild(member);
+      } else if (aura >= 0) {
+        silver.appendChild(member);
+      } else if (aura > -500) {
+        bronze.appendChild(member);
+      } else {
+        shit.appendChild(member);
+      }
+    }
+  </script>
+
+</body>
+</html>
